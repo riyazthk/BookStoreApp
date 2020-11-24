@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {
   View,
@@ -19,12 +20,14 @@ const PlaceOrder = (props) => {
   const handleRemoveCart = () => {
     if (quantity >= 1) {
       setQuantity(quantity - 1);
+      props.bookDetails.setQuantity(props.bookDetails.quantity - 1);
       setPrice(price - props.bookDetails.price);
       props.bookDetails.setChangePrice(price - props.bookDetails.price);
     }
   };
   const handleAddCart = () => {
     setQuantity(quantity + 1);
+    props.bookDetails.setQuantity(props.bookDetails.quantity + 1);
     setPrice(price + props.bookDetails.price);
     props.bookDetails.setChangePrice(price + props.bookDetails.price);
   };
@@ -42,7 +45,7 @@ const PlaceOrder = (props) => {
         <View style={{flexDirection: 'row'}}>
           <View>
             <Image
-              source={props.bookDetails.booksitem.item.imageUrl}
+              source={props.bookDetails.booksitem.imageUrl}
               style={{
                 resizeMode: 'contain',
                 height: 170,
@@ -52,11 +55,11 @@ const PlaceOrder = (props) => {
             />
           </View>
           <View>
-            <Text style={{color: 'brown', fontSize: 15}}>
-              {props.bookDetails.booksitem.item.title}
+            <Text style={{color: 'brown', fontSize: 20}}>
+              {props.bookDetails.booksitem.title}
             </Text>
             <Text style={{color: 'grey', fontSize: 12}}>
-              {props.bookDetails.booksitem.item.Author}
+              {props.bookDetails.booksitem.Author}
             </Text>
             <Text style={{fontSize: 20}}>price:{props.bookDetails.price}</Text>
             <View>

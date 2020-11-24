@@ -52,7 +52,9 @@ const ViewBooks = () => {
                   title="ADD To Bag"
                   color="brown"
                   onPress={() =>
-                    navigaiton.navigate('orderPage', {booksitem: booksitem})
+                    navigaiton.navigate('orderPage', {
+                      booksitem: booksitem.item,
+                    })
                   }></Button>
               </View>
               <View style={{padding: 5}}>

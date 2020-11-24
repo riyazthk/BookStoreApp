@@ -2,14 +2,15 @@ import React, {useState} from 'react';
 import {View, Text, ScrollView} from 'react-native';
 import {bookDetails} from '../showBooks/bookDetails';
 import CustomerDetails from './CustomerDetails';
-import OrderSummary from './OrderSummary';
 import PlaceOrder from './PlaceOrder';
 const OrderPage = ({navigation, route}) => {
   const {booksitem = undefined} = route.params ?? {};
-  const [price, setPrice] = useState(booksitem.item.price);
-  const [changeprice, setChangePrice] = useState(booksitem.item.price);
+  const [price, setPrice] = useState(booksitem.price);
+  const [changeprice, setChangePrice] = useState(booksitem.price);
   const [showCustomerDetails, setShowCustomerDetails] = useState(false);
   const [orderSummary, setOrderSummary] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  console.log(changeprice);
   let bookDetails = {
     booksitem: booksitem,
     price: price,
@@ -20,14 +21,19 @@ const OrderPage = ({navigation, route}) => {
     setOrderSummary: setOrderSummary,
     changeprice: changeprice,
     setChangePrice: setChangePrice,
+    quantity: quantity,
+    setQuantity: setQuantity,
   };
-  console.log(bookDetails);
+  console.log(bookDetails.quantity);
   return (
     <View style={{height: '100%', backgroundColor: 'white'}}>
       <ScrollView>
         <PlaceOrder bookDetails={bookDetails} />
-        <CustomerDetails bookDetails={bookDetails} />
-        <OrderSummary bookDetails={bookDetails} />
+        <CustomerDetails
+          bookDetails={bookDetails}
+          price={bookDetails.changeprice}
+        />
+        {/* <OrderSummary bookDetails={bookDetails} /> */}
       </ScrollView>
     </View>
   );

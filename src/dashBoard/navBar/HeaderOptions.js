@@ -1,7 +1,10 @@
+/* eslint-disable react-native/no-inline-styles */
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 import {} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
 const HeaderOptions = () => {
+  const navigation = useNavigation();
   return (
     <View style={{paddingTop: 28, paddingLeft: 10, paddingRight: 5}}>
       <View
@@ -33,15 +36,17 @@ const HeaderOptions = () => {
             backgroundColor: 'white',
             paddingLeft: 10,
           }}>
-          <Text style={{textAlign: 'left', paddingTop:5}}>
+          <Text style={{textAlign: 'left', paddingTop: 5}}>
             Search your books..
           </Text>
         </View>
         <View style={{width: '12%', paddingLeft: 10}}>
-          <Image
-            source={require('../../assest/cart1.png')}
-            style={{height: 35, width: 35, tintColor: 'white'}}
-          />
+          <TouchableOpacity onPress={() => navigation.navigate('orderHistory')}>
+            <Image
+              source={require('../../assest/cart1.png')}
+              style={{height: 35, width: 35, tintColor: 'white'}}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </View>
