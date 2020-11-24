@@ -20,7 +20,7 @@ const OrderSummary = ({route}) => {
     let books = {
       title: booksDetails.title,
       author: booksDetails.Author,
-      image: bookDetails.imageUrl,
+      image: booksDetails.imageUrl,
       price: changePrice,
     };
     let value = {
@@ -32,7 +32,11 @@ const OrderSummary = ({route}) => {
     };
     addDetails(value);
     addHistoryDetails(value);
-    navigation.navigate('confirmationOrder');
+    navigation.navigate('confirmationOrder', {
+      books: books,
+      booksDetails: booksDetails,
+      customerDetails: customerDetails,
+    });
   };
   return (
     <View>

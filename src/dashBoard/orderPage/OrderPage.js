@@ -4,14 +4,15 @@ import {bookDetails} from '../showBooks/bookDetails';
 import CustomerDetails from './CustomerDetails';
 import PlaceOrder from './PlaceOrder';
 const OrderPage = ({navigation, route}) => {
-  const {booksitem = undefined} = route.params ?? {};
+  const {booksitem = undefined, bookIndex = undefined} = route.params ?? {};
   const [price, setPrice] = useState(booksitem.price);
   const [changeprice, setChangePrice] = useState(booksitem.price);
   const [showCustomerDetails, setShowCustomerDetails] = useState(false);
   const [orderSummary, setOrderSummary] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  console.log(changeprice);
+  console.log('index', bookIndex);
   let bookDetails = {
+    bookIndex: bookIndex,
     booksitem: booksitem,
     price: price,
     setPrice: setPrice,

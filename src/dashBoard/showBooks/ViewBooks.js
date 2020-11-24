@@ -54,6 +54,7 @@ const ViewBooks = () => {
                   onPress={() =>
                     navigaiton.navigate('orderPage', {
                       booksitem: booksitem.item,
+                      bookIndex: booksitem.index,
                     })
                   }></Button>
               </View>

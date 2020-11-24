@@ -2,16 +2,16 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View, Text, Button} from 'react-native';
 import {Card, Input} from 'react-native-elements';
-import {TextInput} from 'react-native-gesture-handler';
-
+import {ScrollView} from 'react-native-gesture-handler';
+import {color} from 'react-native-reanimated';
 import {
   validateFormData,
   validateMobileNumber,
   validatePinCode,
-} from '../formValidation/validations';
-
-const CustomerDetails = (props) => {
-  console.log('value', props.bookDetails.booksitem.title);
+  validateEmail,
+  validatePassword,
+} from '../../dashBoard/formValidation/validations';
+const SignUp = () => {
   const [errorValue, setErrorValue] = useState([]);
   const [formValue, setFormValue] = useState([{}]);
   const [emptyValue, setEmptyValue] = useState([]);
@@ -19,7 +19,6 @@ const CustomerDetails = (props) => {
   let arr;
   let empty;
   let values = [];
-  console.log('booo', props.price);
   const data = {
     projectId: 2,
     projectFields: [
@@ -39,6 +38,18 @@ const CustomerDetails = (props) => {
         fieldName: 'pincode',
         fieldValue: 'pincode ',
         fieldErrorMsg: 'Enter valid value',
+        isMandatory: true,
+      },
+      {
+        fieldName: 'email',
+        fieldValue: 'email ',
+        fieldErrorMsg: 'Enter valid email',
+        isMandatory: true,
+      },
+      {
+        fieldName: 'password',
+        fieldValue: 'password ',
+        fieldErrorMsg: 'Enter valid password',
         isMandatory: true,
       },
       {
@@ -76,6 +87,10 @@ const CustomerDetails = (props) => {
       response = validateMobileNumber(value);
     } else if (item.fieldName === 'pincode') {
       response = validatePinCode(value);
+    } else if (item.fieldName === 'email') {
+      response = validateEmail(value);
+    } else if (item.fieldName === 'password') {
+      response = validatePassword(value);
     }
     console.log('xc', response);
     if (response === false) {
@@ -120,67 +135,48 @@ const CustomerDetails = (props) => {
     });
     if (count === 2) {
       console.log('count entry', count);
-      // props.bookDetails.setOrderSummary(!props.bookDetails.orderSummary);
-      navigaiton.navigate('orderSummary', {
-        booksDetails: props.bookDetails.booksitem,
-        bookIndex: props.bookDetails.bookIndex,
-        changePrice: props.price,
-        customerDetails: formValue,
-      });
-      // console.log(formValue[0].key);
-      // let bookDetails = {
-      //   title: props.bookDetails.booksitem.item.title,
-      //   author: props.bookDetails.booksitem.item.Author,
-      //   price: props.bookDetails.booksitem.item.price,
-      //   image: props.bookDetails.booksitem.item.imageUrl,
-      //   quantity: props.bookDetails.booksitem.item.quantity,
-      // };
-      // let value = {
-      //   customerDetails: formValue,
-      //   bookDetails: bookDetails,
-      // };
-      // title: props.bookDetails.booksitem.item.title,
-      // author: props.bookDetails.booksitem.item.Author,
-      // price: props.bookDetails.booksitem.item.price,
-      // image: props.bookDetails.booksitem.item.imageUrl,
-      // quantity: props.bookDetails.booksitem.item.quantity,
-      //   addDetails(value);
     }
   };
   return (
-    <View>
-      {props.bookDetails.showCustomerDetails === true ? (
-        <View>
-          <Card>
-            {/* <TextInput placeholder="name" underlineColorAndroid="black" />
-            <TextInput
-              placeholder="phone Number"
-              underlineColorAndroid="black"
-            />
-            <TextInput placeholder="pincode" underlineColorAndroid="black" />
-            <TextInput placeholder="locality" underlineColorAndroid="black" />
-            <TextInput placeholder="Address" underlineColorAndroid="black" />
-            <TextInput placeholder="city/town" underlineColorAndroid="black" />
-            <TextInput placeholder="landmark" underlineColorAndroid="black" /> */}
-            {data.projectFields.map((item, index) => {
-              return (
-                <Input
-                  label={item.fieldValue}
-                  onChangeText={(currentAddress) =>
-                    handleFormInput(currentAddress, index, item)
-                  }
-                  errorMessage={errorValue[index]}
-                />
-              );
-            })}
-            <Button
-              title="Continue"
-              color="brown"
-              onPress={() => handleCustomerDetails()}></Button>
-          </Card>
-        </View>
-      ) : null}
+    <View style={{height: '100%', paddingTop: 25, backgroundColor: 'white'}}>
+      <Card>
+        <ScrollView>
+          <View style={{padding: 10}}>
+            <Text style={{textAlign: 'center', fontSize: 25, color: 'brown'}}>
+              SignUp
+            </Text>
+          </View>
+          {data.projectFields.map((item, index) => {
+            return (
+              <Input
+                label={item.fieldValue}
+                color={'brown'}
+                onChangeText={(currentAddress) =>
+                  handleFormInput(currentAddress, index, item)
+                }
+                errorMessage={errorValue[index]}
+              />
+            );
+          })}
+          <View style={{justifyContent: 'space-between'}}>
+            <View style={{padding: 10}}>
+              <Button
+                title="submit"
+                color="brown"
+                onPress={() => handleCustomerDetails()}
+              />
+            </View>
+            <View style={{padding: 10}}>
+              <Button
+                title="back to login"
+                color="brown"
+                onPress={() => navigaiton.navigate('signUp')}
+              />
+            </View>
+          </View>
+        </ScrollView>
+      </Card>
     </View>
   );
 };
-export default CustomerDetails;
+export default SignUp;
