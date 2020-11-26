@@ -1,5 +1,6 @@
+import {useNavigation} from '@react-navigation/native';
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,9 +8,13 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
+  AsyncStorage,
 } from 'react-native';
 import {Card} from 'react-native-elements';
+import {getDetails} from '../../customerService/userDetails';
+import {getCustomerDetails} from '../../customerService/userService';
 const PlaceOrder = (props) => {
+  const navigation = useNavigation();
   console.log(
     'place order ',
     props.bookDetails.price,
@@ -17,6 +22,25 @@ const PlaceOrder = (props) => {
   );
   const [quantity, setQuantity] = useState(1);
   const [price, setPrice] = useState(props.bookDetails.price);
+  const [customerDetails, setCustomerDetails] = useState([]);
+  useEffect(() => {
+    getCustomerDetails().then((res) => {
+      // console.log('entry data');
+      // let data = Object.keys(res);
+      // Object.keys(res.data).map((item, index) => {
+      //   console.log('details', item);
+      //console.log('data', res);
+      Object.keys(res).map((keys, index) => {
+        console.log('console', res[keys]);
+        setCustomerDetails(res[keys]);
+      });
+      //setCustomerDetails(res);
+      // setCustomerDetails(res);
+    });
+    customerDetails.map((item, index) => {
+      console.log(item);
+    });
+  }, []);
   const handleRemoveCart = () => {
     if (quantity >= 1) {
       setQuantity(quantity - 1);
@@ -31,10 +55,25 @@ const PlaceOrder = (props) => {
     setPrice(price + props.bookDetails.price);
     props.bookDetails.setChangePrice(price + props.bookDetails.price);
   };
-  const handlePlaceOrder = () => {
-    props.bookDetails.setShowCustomerDetails(
-      !props.bookDetails.showCustomerDetails,
-    );
+  const handlePlaceOrder = async () => {
+    let token = await AsyncStorage.getItem('token');
+    if (token !== null) {
+      console.log('seet', customerDetails, price);
+      navigation.navigate('orderSummary', {
+        customerDetails: customerDetails,
+        booksDetails: props.bookDetails.booksitem,
+        changePrice: price,
+      });
+    } else {
+      // props.bookDetails.setShowCustomerDetails(
+      //   !props.bookDetails.showCustomerDetails,
+      //);
+      navigation.navigate('login');
+    }
+  };
+  const handleSignOut = async () => {
+    let response = await AsyncStorage.removeItem('token');
+    console.log('logout', response);
   };
   return (
     <View style={{paddingTop: 25, backgroundColor: 'white', paddingBottom: 15}}>
@@ -87,10 +126,17 @@ const PlaceOrder = (props) => {
               </View>
               <View>
                 {props.bookDetails.showCustomerDetails === false ? (
-                  <Button
-                    title="place order"
-                    color="brown"
-                    onPress={() => handlePlaceOrder()}></Button>
+                  <View>
+                    <Button
+                      title="place order"
+                      color="brown"
+                      onPress={() => handlePlaceOrder()}></Button>
+
+                    <Button
+                      title="logout"
+                      color="brown"
+                      onPress={() => handleSignOut()}></Button>
+                  </View>
                 ) : null}
               </View>
             </View>

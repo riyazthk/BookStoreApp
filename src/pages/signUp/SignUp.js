@@ -1,9 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {View, Text, Button} from 'react-native';
+import {View, Text, Button, AsyncStorage} from 'react-native';
 import {Card, Input} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
 import {color} from 'react-native-reanimated';
+import {SignUpData} from '../../customerService/userService';
 import {
   validateFormData,
   validateMobileNumber,
@@ -116,7 +117,7 @@ const SignUp = () => {
       console.log(formValue);
     }
   };
-  const handleCustomerDetails = () => {
+  const handleCustomerDetails = async () => {
     let count = 0;
     let arra = [...errorValue];
     data.projectFields.map((item, index) => {
@@ -134,7 +135,14 @@ const SignUp = () => {
       console.log('count', count);
     });
     if (count === 2) {
-      console.log('count entry', count);
+      console.log('count entry', formValue[3].value);
+      let data = {formValue: formValue};
+      await SignUpData(data).then((res) => {
+        // if (res.user.uid !== null) {
+        navigaiton.navigate('login');
+        // }
+        console.log('signUp', res);
+      });
     }
   };
   return (
@@ -170,7 +178,7 @@ const SignUp = () => {
               <Button
                 title="back to login"
                 color="brown"
-                onPress={() => navigaiton.navigate('signUp')}
+                onPress={() => navigaiton.navigate('login')}
               />
             </View>
           </View>

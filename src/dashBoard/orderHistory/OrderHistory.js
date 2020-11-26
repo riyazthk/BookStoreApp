@@ -5,14 +5,17 @@ import React from 'react';
 import {View, Text, Image} from 'react-native';
 import {Card} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
+
 const OrderHistory = () => {
   const [viewHistory, setViewHistory] = useState([]);
+
   useEffect(() => {
     getHistoryOrder().then((res) => {
       console.log('call', res);
       setViewHistory(res);
     });
   }, []);
+
   return (
     <View style={{height: '100%', backgroundColor: 'white'}}>
       <ScrollView>

@@ -14,7 +14,7 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={'login'}
+        initialRouteName={'homePage'}
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="homePage" component={HomePage} />
         <Stack.Screen name="orderPage" component={OrderPage} />

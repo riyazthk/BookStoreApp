@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View, Text, Button, ScrollView} from 'react-native';
 import {Card, Input} from 'react-native-elements';
+import {SignIn} from '../../customerService/userService';
 import {
   validateEmail,
   validateFormData,
@@ -65,7 +66,7 @@ const Login = () => {
       console.log(formValue);
     }
   };
-  const handleCustomerDetails = () => {
+  const handleCustomerDetails = async () => {
     let count = 0;
     let arra = [...errorValue];
     data.projectFields.map((item, index) => {
@@ -83,7 +84,13 @@ const Login = () => {
       console.log('count', count);
     });
     if (count === 2) {
-      console.log('count entry', count);
+      await SignIn(formValue).then((res) => {
+        // if (res.user.uid !== null) {
+          navigaiton.navigate('homePage');
+        //}
+
+        console.log('signIn', res);
+      });
     }
   };
   return (
