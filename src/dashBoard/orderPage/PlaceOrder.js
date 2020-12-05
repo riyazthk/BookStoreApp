@@ -1,17 +1,9 @@
+import AsyncStorage from '@react-native-community/async-storage';
 import {useNavigation} from '@react-navigation/native';
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  Button,
-  AsyncStorage,
-} from 'react-native';
+import {View, Text, Image, TouchableOpacity, Button} from 'react-native';
 import {Card} from 'react-native-elements';
-import {getDetails} from '../../customerService/userDetails';
 import {getCustomerDetails} from '../../customerService/userService';
 const PlaceOrder = (props) => {
   const navigation = useNavigation();
@@ -23,23 +15,24 @@ const PlaceOrder = (props) => {
   const [quantity, setQuantity] = useState(1);
   const [price, setPrice] = useState(props.bookDetails.price);
   const [customerDetails, setCustomerDetails] = useState([]);
+  const flag = Math.random();
+
   useEffect(() => {
-    getCustomerDetails().then((res) => {
-      // console.log('entry data');
-      // let data = Object.keys(res);
-      // Object.keys(res.data).map((item, index) => {
-      //   console.log('details', item);
-      //console.log('data', res);
-      Object.keys(res).map((keys, index) => {
-        console.log('console', res[keys]);
-        setCustomerDetails(res[keys]);
-      });
-      //setCustomerDetails(res);
-      // setCustomerDetails(res);
-    });
-    customerDetails.map((item, index) => {
-      console.log(item);
-    });
+    const call = async () => {
+      let emailToken = await AsyncStorage.getItem('token');
+      console.log('tokenxcds', emailToken);
+      if (emailToken !== null) {
+        console.log('entry');
+        await getCustomerDetails().then((res) => {
+          console.log(res);
+          Object.keys(res).map((keys, index) => {
+            console.log('console', res[keys]);
+            setCustomerDetails(res[keys]);
+          });
+        });
+      }
+    };
+    call();
   }, []);
   const handleRemoveCart = () => {
     if (quantity >= 1) {
@@ -57,6 +50,7 @@ const PlaceOrder = (props) => {
   };
   const handlePlaceOrder = async () => {
     let token = await AsyncStorage.getItem('token');
+    console.log('toooooo', token);
     if (token !== null) {
       console.log('seet', customerDetails, price);
       navigation.navigate('orderSummary', {
@@ -65,16 +59,13 @@ const PlaceOrder = (props) => {
         changePrice: price,
       });
     } else {
-      // props.bookDetails.setShowCustomerDetails(
-      //   !props.bookDetails.showCustomerDetails,
-      //);
-      navigation.navigate('login');
+      navigation.navigate('login', {flag: flag});
     }
+    // console.log('entry');
+    // AsyncStorage.removeItem('token');
+    // AsyncStorage.removeItem('email');
   };
-  const handleSignOut = async () => {
-    let response = await AsyncStorage.removeItem('token');
-    console.log('logout', response);
-  };
+
   return (
     <View style={{paddingTop: 25, backgroundColor: 'white', paddingBottom: 15}}>
       <Card>
@@ -130,12 +121,8 @@ const PlaceOrder = (props) => {
                     <Button
                       title="place order"
                       color="brown"
-                      onPress={() => handlePlaceOrder()}></Button>
-
-                    <Button
-                      title="logout"
-                      color="brown"
-                      onPress={() => handleSignOut()}></Button>
+                      onPress={() => handlePlaceOrder()}
+                    />
                   </View>
                 ) : null}
               </View>

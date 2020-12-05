@@ -1,10 +1,14 @@
+/* eslint-disable react-native/no-inline-styles */
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
-import {View, Text, Button, AsyncStorage} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, Button} from 'react-native';
 import {Card, Input} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
-import {color} from 'react-native-reanimated';
-import {SignUpData} from '../../customerService/userService';
+import {
+  editCustomerDetails,
+  SignUpData,
+  alternateData,
+} from '../../customerService/userService';
 import {
   validateFormData,
   validateMobileNumber,
@@ -12,92 +16,100 @@ import {
   validateEmail,
   validatePassword,
 } from '../../dashBoard/formValidation/validations';
-const SignUp = () => {
+import {data} from './arrayData';
+const SignUp = ({route}) => {
+  const {
+    customerDetails = undefined,
+    flag = undefined,
+    alternateAddress = undefined,
+  } = route.params ?? {};
   const [errorValue, setErrorValue] = useState([]);
   const [formValue, setFormValue] = useState([{}]);
   const [emptyValue, setEmptyValue] = useState([]);
+  const [editedValues, setEditedValues] = useState([]);
   const navigaiton = useNavigation();
   let arr;
   let empty;
-  let values = [];
-  const data = {
-    projectId: 2,
-    projectFields: [
-      {
-        fieldName: 'text',
-        fieldValue: 'Name',
-        fieldErrorMsg: 'Enter valid name',
-        isMandatory: true,
-      },
-      {
-        fieldName: 'numeric',
-        fieldValue: 'phoneNumber',
-        fieldErrorMsg: 'Enter valid number',
-        isMandatory: true,
-      },
-      {
-        fieldName: 'pincode',
-        fieldValue: 'pincode ',
-        fieldErrorMsg: 'Enter valid value',
-        isMandatory: true,
-      },
-      {
-        fieldName: 'email',
-        fieldValue: 'email ',
-        fieldErrorMsg: 'Enter valid email',
-        isMandatory: true,
-      },
-      {
-        fieldName: 'password',
-        fieldValue: 'password ',
-        fieldErrorMsg: 'Enter valid password',
-        isMandatory: true,
-      },
-      {
-        fieldName: 'text',
-        fieldValue: 'locality ',
-        fieldErrorMsg: 'Enter valid location',
-        isMandatory: true,
-      },
-      {
-        fieldName: 'text',
-        fieldValue: 'Address ',
-        fieldErrorMsg: 'Enter valid Address',
-        isMandatory: true,
-      },
-      {
-        fieldName: 'text',
-        fieldValue: 'city',
-        fieldErrorMsg: 'Enter valid city',
-        isMandatory: true,
-      },
-      {
-        fieldName: 'text',
-        fieldValue: 'landMark',
-        fieldErrorMsg: 'Enter valid landmark',
-        isMandatory: true,
-      },
-    ],
-  };
+  let bookData =
+    customerDetails === undefined
+      ? data.projectFields
+      : customerDetails.formValue;
+  const [handleValue, setHandleValue] = useState([]);
+  const [handleBookArrayFlag, setHandleBookArrayFlag] = useState([]);
+  let response;
+
+  let boolArr = [...handleBookArrayFlag];
+  let boolEdit = [...editedValues];
+  // useEffect(() => {
+  //   if (customerDetails !== undefined) {
+  //     bookData.map((item, index) => {
+  //       boolArr[index] = false;
+  //       setHandleBookArrayFlag(boolArr);
+  //       boolEdit[index] = item;
+  //       setEditedValues(boolEdit);
+  //     });
+  //   }
+  // }, []);
+  let count = 0;
   const handleFormInput = (value, index, item) => {
-    console.log('arrray benificia', value, index);
-    let response;
-    if (item.fieldName === 'text') {
-      response = validateFormData(value);
-    } else if (item.fieldName === 'numeric') {
-      response = validateMobileNumber(value);
-    } else if (item.fieldName === 'pincode') {
-      response = validatePinCode(value);
-    } else if (item.fieldName === 'email') {
-      response = validateEmail(value);
-    } else if (item.fieldName === 'password') {
-      response = validatePassword(value);
+    if (customerDetails !== undefined && count === 0) {
+      bookData.map((item, index) => {
+        boolArr[index] = false;
+        setHandleBookArrayFlag(boolArr);
+        boolEdit[index] = item;
+        setEditedValues(boolEdit);
+      });
+      count = 1;
     }
-    console.log('xc', response);
+    let resArr;
+    resArr = [...handleValue];
+    if (
+      item.fieldName === 'text' ||
+      item.key === 'Name' ||
+      item.key === 'locality ' ||
+      item.key === 'Address ' ||
+      item.key === 'city' ||
+      item.key === 'landMark'
+    ) {
+      console.log('entry');
+      response = validateFormData(value);
+      resArr[index] = response;
+      setHandleValue(resArr);
+      boolArr[index] = true;
+      setHandleBookArrayFlag(boolArr);
+    } else if (item.fieldName === 'numeric' || item.key === 'phoneNumber') {
+      console.log('entry');
+      response = validateMobileNumber(value);
+      resArr[index] = response;
+      setHandleValue(resArr);
+      boolArr[index] = true;
+      setHandleBookArrayFlag(boolArr);
+    } else if (item.fieldName === 'pincode' || item.key === 'pincode ') {
+      console.log('entry');
+      response = validatePinCode(value);
+      resArr[index] = response;
+      setHandleValue(resArr);
+      boolArr[index] = true;
+      setHandleBookArrayFlag(boolArr);
+    } else if (item.fieldName === 'email' || item.key === 'email ') {
+      console.log('entry');
+      response = validateEmail(value);
+      resArr[index] = response;
+      setHandleValue(resArr);
+      boolArr[index] = true;
+      setHandleBookArrayFlag(boolArr);
+    } else if (item.fieldName === 'password' || item.key === 'password ') {
+      console.log('entry');
+      response = validatePassword(value);
+      resArr[index] = response;
+      setHandleValue(resArr);
+      boolArr[index] = true;
+      setHandleBookArrayFlag(boolArr);
+    }
     if (response === false) {
       arr = [...errorValue];
-      arr[index] = item.fieldErrorMsg;
-      console.log('value', arr);
+      arr[index] =
+        customerDetails === undefined ? item.fieldErrorMsg : 'invalid Data';
       setErrorValue(arr);
     } else {
       arr = [...errorValue];
@@ -107,14 +119,22 @@ const SignUp = () => {
       empty[index] = true;
       setEmptyValue(empty);
       let values = {
-        key: item.fieldValue,
-        value: response,
+        key: customerDetails === undefined ? item.fieldValue : item.key,
+        value: handleBookArrayFlag[index] === true ? response : item.value,
       };
-
-      let formArr = [...formValue];
-      formArr[index] = values;
-      setFormValue(formArr);
-      console.log(formValue);
+      if (customerDetails === undefined) {
+        let formArr = [...formValue];
+        formArr[index] = values;
+        setFormValue(formArr);
+        console.log('value', formValue);
+      } else {
+        editedValues.map((editedItem) => {
+          if (editedItem.key === values.key) {
+            editedItem.value = values.value;
+          }
+        });
+      }
+      console.log('edit valuessss', editedValues);
     }
   };
   const handleCustomerDetails = async () => {
@@ -122,7 +142,7 @@ const SignUp = () => {
     let arra = [...errorValue];
     data.projectFields.map((item, index) => {
       console.log('index', formValue[index], index);
-      if (formValue[index] === undefined) {
+      if (formValue[index] === undefined && customerDetails === undefined) {
         console.log('enter');
         arra[index] = 'field not be a empty';
         setErrorValue(arra);
@@ -134,54 +154,124 @@ const SignUp = () => {
       }
       console.log('count', count);
     });
+    console.log('count entry', formValue);
+
     if (count === 2) {
-      console.log('count entry', formValue[3].value);
-      let data = {formValue: formValue};
-      await SignUpData(data).then((res) => {
-        // if (res.user.uid !== null) {
-        navigaiton.navigate('login');
-        // }
-        console.log('signUp', res);
-      });
+      console.log('count entry', formValue);
+      if (customerDetails === undefined && alternateAddress === undefined) {
+        let formData = {formValue: formValue};
+        await SignUpData(formData).then((res) => {
+          navigaiton.navigate('login');
+          console.log('signUp', res);
+        });
+      } else if (
+        customerDetails !== undefined &&
+        alternateAddress === undefined
+      ) {
+        let formData = {formValue: editedValues};
+        await editCustomerDetails(formData).then((res) => {
+          console.log(res);
+        });
+        navigaiton.navigate('homePage');
+      } else if (alternateAddress !== undefined) {
+        let formData = {formValue: formValue};
+        console.log('alternate', data);
+        await alternateData(formData).then((res) => {
+          console.log(res);
+          navigaiton.navigate('homePage');
+        });
+      }
     }
   };
   return (
     <View style={{height: '100%', paddingTop: 25, backgroundColor: 'white'}}>
       <Card>
         <ScrollView>
-          <View style={{padding: 10}}>
-            <Text style={{textAlign: 'center', fontSize: 25, color: 'brown'}}>
-              SignUp
-            </Text>
-          </View>
-          {data.projectFields.map((item, index) => {
+          {customerDetails === undefined ? (
+            <View>
+              {alternateAddress === undefined ? (
+                <View style={{padding: 10}}>
+                  <Text
+                    style={{textAlign: 'center', fontSize: 25, color: 'brown'}}>
+                    SignUp
+                  </Text>
+                </View>
+              ) : (
+                <View style={{padding: 10}}>
+                  <Text
+                    style={{textAlign: 'center', fontSize: 25, color: 'brown'}}>
+                    Alternate Address
+                  </Text>
+                </View>
+              )}
+            </View>
+          ) : (
+            <View style={{padding: 10}}>
+              <Text style={{textAlign: 'center', fontSize: 25, color: 'brown'}}>
+                Edit User Detials
+              </Text>
+            </View>
+          )}
+          {bookData.map((item, index) => {
             return (
               <Input
-                label={item.fieldValue}
+                label={
+                  customerDetails === undefined ? item.fieldValue : item.key
+                }
+                key={index}
                 color={'brown'}
                 onChangeText={(currentAddress) =>
                   handleFormInput(currentAddress, index, item)
                 }
                 errorMessage={errorValue[index]}
+                value={
+                  customerDetails === undefined
+                    ? null
+                    : handleBookArrayFlag[index] === true
+                    ? handleValue[index]
+                    : item.value
+                }
               />
             );
           })}
-          <View style={{justifyContent: 'space-between'}}>
-            <View style={{padding: 10}}>
+          {customerDetails === undefined ? (
+            <View>
+              {alternateAddress === undefined ? (
+                <View style={{justifyContent: 'space-between'}}>
+                  <View style={{padding: 10}}>
+                    <Button
+                      title="submit"
+                      color="brown"
+                      onPress={() => handleCustomerDetails()}
+                    />
+                  </View>
+                  <View style={{padding: 10}}>
+                    <Button
+                      title="back to login"
+                      color="brown"
+                      onPress={() => navigaiton.navigate('login')}
+                    />
+                  </View>
+                </View>
+              ) : (
+                <View style={{padding: 10}}>
+                  <Button
+                    title="submit"
+                    color="brown"
+                    onPress={() => handleCustomerDetails()}
+                  />
+                </View>
+              )}
+            </View>
+          ) : (
+            <View>
               <Button
                 title="submit"
                 color="brown"
                 onPress={() => handleCustomerDetails()}
               />
             </View>
-            <View style={{padding: 10}}>
-              <Button
-                title="back to login"
-                color="brown"
-                onPress={() => navigaiton.navigate('login')}
-              />
-            </View>
-          </View>
+          )}
         </ScrollView>
       </Card>
     </View>

@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 const {useEffect, useState} = require('react');
-const {getHistoryOrder} = require('../../customerService/userDetails');
+import {getHistoryOrder} from '../../customerService/userDetails';
 import React from 'react';
 import {View, Text, Image} from 'react-native';
 import {Card} from 'react-native-elements';

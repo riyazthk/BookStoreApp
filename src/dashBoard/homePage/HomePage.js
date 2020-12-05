@@ -1,13 +1,16 @@
-import {View, Text} from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import {View} from 'react-native';
 import HeaderOptions from '../navBar/HeaderOptions';
 import React, {useState} from 'react';
 import ViewBooks from '../showBooks/ViewBooks';
 import StatusBarView from '../statusBar/StatusBarView';
-const HomePage = () => {
+
+const HomePage = ({route}) => {
   const [sortingOrder, setSortingOrder] = useState([]);
   const [booleanSort, setBooleanSort] = useState(false);
-  const [flag, setFlag] = useState(Math.random());
+  const flag = Math.random();
   console.log('sorted data', sortingOrder);
+
   return (
     <View>
       <View>
@@ -18,6 +21,7 @@ const HomePage = () => {
           <HeaderOptions
             setSortingOrder={setSortingOrder}
             setBooleanSort={setBooleanSort}
+            flag={flag}
           />
         </View>
         <View>

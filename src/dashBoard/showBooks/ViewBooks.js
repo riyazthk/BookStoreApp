@@ -9,22 +9,20 @@ import {
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {bookDetails} from './bookDetails';
-import {} from 'react-native-gesture-handler';
 import {Card} from 'react-native-elements';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {useNavigation} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {getHistoryOrder} from '../../customerService/userDetails';
 
 const ViewBooks = (props) => {
-  const [describeNote, setDescribeNote] = useState();
   const refRBSheet = useRef();
   const navigaiton = useNavigation();
   const filterBooksData =
     props.booleanSort === false ? bookDetails : props.sortingOrder;
   console.log('sorting data', props.sortingOrder, props.booleanSort);
-  useEffect(() => {
-    getHistoryOrder().then((res) => {});
-  }, [props.flag]);
+  // useEffect(() => {
+  //   getHistoryOrder().then((res) => {});
+  // }, [props.flag]);
 
   const renderItem = (booksitem) => {
     return (
@@ -59,11 +57,13 @@ const ViewBooks = (props) => {
                 <Button
                   title="ADD To Bag"
                   color="brown"
-                  onPress={() =>
-                    navigaiton.navigate('orderPage', {
-                      booksitem: booksitem.item,
-                      bookIndex: booksitem.index,
-                    })
+                  onPress={
+                    () =>
+                      navigaiton.navigate('orderPage', {
+                        booksitem: booksitem.item,
+                        bookIndex: booksitem.index,
+                      })
+                    //handleArrayBooks(booksitem)
                   }
                 />
               </View>
@@ -104,13 +104,10 @@ const ViewBooks = (props) => {
         data={filterBooksData}
         renderItem={renderItem}
         contentContainerStyle={{
-          flexDirection: 'row',
           flexWrap: 'wrap',
-          //backgroundColor: 'violet',
-          //justifyContent: 'space-between',
-          //padding: 10,
+          flexDirection: 'row',
         }}
-        keyExtractor={(index) => index}
+        keyExtractor={(item, index) => String(index)}
       />
     </View>
   );

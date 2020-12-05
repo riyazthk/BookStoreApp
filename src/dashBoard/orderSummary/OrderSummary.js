@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import {useLinkProps, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, Button} from 'react-native';
+import {View, Text, Image, Button, FlatList} from 'react-native';
 import {Card} from 'react-native-elements';
 import {getDetails} from '../../customerService/userDetails';
 import {addDetails} from '../../customerService/userDetails';
@@ -14,8 +14,14 @@ const OrderSummary = ({route}) => {
     customerDetails = undefined,
     changePrice = undefined,
   } = route.params ?? {};
-  console.log('dee', booksDetails.imageUrl, changePrice, customerDetails);
+  console.log(
+    'dee',
+    booksDetails.imageUrl,
+    changePrice,
+    customerDetails.formValue,
+  );
   const navigation = useNavigation();
+  const flag = Math.random();
   const handleOrderBooks = () => {
     let books = {
       title: booksDetails.title,
@@ -37,6 +43,25 @@ const OrderSummary = ({route}) => {
       booksDetails: booksDetails,
       customerDetails: customerDetails,
     });
+  };
+  const handleEdit = (value) => {
+    if (value === 'editDetails') {
+      navigation.navigate('signUp', {
+        customerDetails: customerDetails,
+        flag: flag,
+      });
+    } else if (value === 'alternateAddress') {
+      navigation.navigate('signUp', {alternateAddress: 'altenateAddress'});
+    }
+  };
+  const render = (item, index) => {
+    console.log('enter flatlist', item);
+    return (
+      <View style={{flexDirection: 'row', padding: 5}}>
+        <Text style={{fontSize: 20}}>{item.item.key} :</Text>
+        <Text style={{fontSize: 20, paddingLeft: 10}}>{item.item.value}</Text>
+      </View>
+    );
   };
   return (
     <View>
@@ -71,6 +96,29 @@ const OrderSummary = ({route}) => {
                     onPress={() => handleOrderBooks()}></Button>
                 </View>
               </View>
+            </View>
+          </View>
+          <View>
+            <FlatList
+              data={customerDetails.formValue}
+              renderItem={render}
+              keyExtractor={(item, index) => String(index)}
+            />
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{width: '30%'}}>
+              <Button
+                title="edit"
+                color="brown"
+                onPress={() => handleEdit('editDetails')}
+              />
+            </View>
+            <View>
+              <Button
+                title="alternate address"
+                color="brown"
+                onPress={() => handleEdit('alternateAddress')}
+              />
             </View>
           </View>
         </Card>

@@ -5,6 +5,8 @@ import CustomerDetails from './CustomerDetails';
 import PlaceOrder from './PlaceOrder';
 const OrderPage = ({navigation, route}) => {
   const {booksitem = undefined, bookIndex = undefined} = route.params ?? {};
+  const [details, setDetails] = useState(booksitem);
+  console.log('as', booksitem);
   const [price, setPrice] = useState(booksitem.price);
   const [changeprice, setChangePrice] = useState(booksitem.price);
   const [showCustomerDetails, setShowCustomerDetails] = useState(false);
@@ -30,10 +32,7 @@ const OrderPage = ({navigation, route}) => {
     <View style={{height: '100%', backgroundColor: 'white'}}>
       <ScrollView>
         <PlaceOrder bookDetails={bookDetails} />
-        <CustomerDetails
-          bookDetails={bookDetails}
-          price={bookDetails.changeprice}
-        />
+        {/* <CustomerDetails price={bookDetails.changeprice} /> */}
         {/* <OrderSummary bookDetails={bookDetails} /> */}
       </ScrollView>
     </View>

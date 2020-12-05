@@ -1,21 +1,31 @@
+/* eslint-disable react-native/no-inline-styles */
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Button, ScrollView} from 'react-native';
 import {Card, Input} from 'react-native-elements';
 import {SignIn} from '../../customerService/userService';
 import {
   validateEmail,
-  validateFormData,
   validatePassword,
 } from '../../dashBoard/formValidation/validations';
-import ViewBooks from '../../dashBoard/showBooks/ViewBooks';
+
 const Login = () => {
   const [errorValue, setErrorValue] = useState([]);
   const [formValue, setFormValue] = useState([{}]);
   const [emptyValue, setEmptyValue] = useState([]);
+  // const [userDetails, setUserDetails] = useState([]);
   let arr;
   let empty;
-
+  const flag = Math.random();
+  useEffect(() => {
+    // getCustomerDetails().then((res) => {
+    //   Object.keys(res).map((keys, index) => {
+    //     console.log('console', res[keys].formValue);
+    //     setUserDetails(res[keys].formValue);
+    //   });
+    //   console.log('details', userDetails[0].value);
+    // });
+  }, []);
   const navigaiton = useNavigation();
   const data = {
     projectId: 2,
@@ -86,7 +96,7 @@ const Login = () => {
     if (count === 2) {
       await SignIn(formValue).then((res) => {
         // if (res.user.uid !== null) {
-          navigaiton.navigate('homePage');
+        navigaiton.navigate('homePage', {flag: flag});
         //}
 
         console.log('signIn', res);

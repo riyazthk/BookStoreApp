@@ -1,6 +1,5 @@
+import AsyncStorage from '@react-native-community/async-storage';
 import {firebase} from '@react-native-firebase/database';
-import {AsyncStorage} from 'react-native';
-import {bookDetails} from '../dashBoard/showBooks/bookDetails';
 
 export const addDetails = async (data) => {
   console.log('value', data);
@@ -33,7 +32,7 @@ export const addHistoryDetails = async (data) => {
 
 export async function getHistoryOrder() {
   let arr = [];
-  let token = await AsyncStorage.getItem('email');
+  let token = await AsyncStorage.getItem('token');
   await firebase
     .database()
     .ref('/historyDetails/')
