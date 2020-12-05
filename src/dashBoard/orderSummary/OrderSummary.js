@@ -49,8 +49,7 @@ const OrderSummary = ({route}) => {
     }
   };
 
-  const render = (item, index) => {
-    console.log('enter flatlist', item);
+  const render = (item) => {
     return (
       <View style={{flexDirection: 'row', padding: 5}}>
         <Text style={{fontSize: 20}}>{item.item.key} :</Text>
@@ -99,7 +98,7 @@ const OrderSummary = ({route}) => {
             <FlatList
               data={customerDetails.formValue}
               renderItem={render}
-              keyExtractor={(item, index) => String(index)}
+              keyExtractor={(index) => String(index)}
             />
           </View>
           <View style={{flexDirection: 'row'}}>

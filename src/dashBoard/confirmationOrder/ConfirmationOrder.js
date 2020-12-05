@@ -60,7 +60,7 @@ const ConfirmationOrder = ({route}) => {
                 <FlatList
                   data={viewBook}
                   renderItem={render}
-                  keyExtractor={(index) => index}
+                  keyExtractor={(index) => String(index)}
                 />
                 <View style={{padding: 10}}>
                   <Button
