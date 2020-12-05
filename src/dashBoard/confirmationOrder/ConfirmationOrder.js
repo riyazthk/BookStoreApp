@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {getDetails} from '../../customerService/userDetails';
+/* eslint-disable react-native/no-inline-styles */
+import React from 'react';
 import {View, Text, Button, Image, ScrollView} from 'react-native';
 import {Card} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
@@ -8,17 +8,10 @@ import {FlatList} from 'react-native-gesture-handler';
 const ConfirmationOrder = ({route}) => {
   const {books = undefined, customerDetails = undefined} = route.params ?? {};
 
-  const [viewBook, setViewBook] = useState(customerDetails.formValue);
-  console.log('image', books.image, customerDetails);
-
-  // Object.keys(customerDetails.formValue).map((item, index) => {
-  //   console.log('data', customerDetails.formValue);
-  //setViewBook(customerDetails.formValue);
-  // });
-
+  const viewBook = customerDetails.formValue;
   const navigation = useNavigation();
+
   const render = (item, index) => {
-    console.log('item', item);
     return (
       <View style={{flexDirection: 'row', padding: 5}}>
         <Text style={{fontSize: 20}}>{item.item.key} :</Text>
@@ -26,6 +19,7 @@ const ConfirmationOrder = ({route}) => {
       </View>
     );
   };
+
   return (
     <View>
       <View style={{height: '100%', backgroundColor: 'white', paddingTop: 35}}>
@@ -53,7 +47,7 @@ const ConfirmationOrder = ({route}) => {
                   </Text>
                   <Text style={{fontSize: 25}}>Rs.{books.price}</Text>
                   <Text>{books.author}</Text>
-                  <View style={{paddingTop: 10}}></View>
+                  <View style={{paddingTop: 10}} />
                 </View>
               </View>
               <Card.Divider style={{backgroundColor: 'brown', height: 2}} />
@@ -63,20 +57,6 @@ const ConfirmationOrder = ({route}) => {
                     customerDetails :
                   </Text>
                 </View>
-                {/* {Object.keys(customerDetails.formValue).map((item, index) => {
-                  return (
-                    <View style={{flexDirection: 'row', padding: 5}}>
-                      <Text style={{fontSize: 20}}>
-                        {customerDetails[item][index].key} :
-                        {customerDetails.formValue[item].key}
-                      </Text>
-                      <Text style={{fontSize: 20, paddingLeft: 10}}>
-                        {customerDetails[item][index].value}
-                        {customerDetails.formValue[item].key}
-                      </Text>
-                    </View>
-                  );
-                })} */}
                 <FlatList
                   data={viewBook}
                   renderItem={render}
@@ -86,7 +66,8 @@ const ConfirmationOrder = ({route}) => {
                   <Button
                     title="Back To Home"
                     color="brown"
-                    onPress={() => navigation.navigate('homePage')}></Button>
+                    onPress={() => navigation.navigate('homePage')}
+                  />
                 </View>
               </View>
             </View>

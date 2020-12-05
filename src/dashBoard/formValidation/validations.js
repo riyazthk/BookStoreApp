@@ -2,7 +2,7 @@ const regexvalidateMobileNumber = new RegExp(/^[0-9]{10}$/);
 const regexValidateFormData = new RegExp(/^[a-zA-Z ]*$/);
 const regexValidatePincode = new RegExp(/^(\d{4}|\d{6})$/);
 const regexValidateEmail = new RegExp(
-  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$$/,
+  /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$$/,
 );
 const regexvalidatePassword = new RegExp(
   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,

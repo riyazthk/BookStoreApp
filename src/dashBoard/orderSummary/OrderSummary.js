@@ -1,27 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
-import {useLinkProps, useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React from 'react';
 import {View, Text, Image, Button, FlatList} from 'react-native';
 import {Card} from 'react-native-elements';
-import {getDetails} from '../../customerService/userDetails';
 import {addDetails} from '../../customerService/userDetails';
 import {addHistoryDetails} from '../../customerService/userDetails';
-import {bookDetails} from '../showBooks/bookDetails';
-//import {bookDetails} from '../showBooks/bookDetails';
+
 const OrderSummary = ({route}) => {
   const {
     booksDetails = undefined,
     customerDetails = undefined,
     changePrice = undefined,
   } = route.params ?? {};
-  console.log(
-    'dee',
-    booksDetails.imageUrl,
-    changePrice,
-    customerDetails.formValue,
-  );
   const navigation = useNavigation();
   const flag = Math.random();
+
   const handleOrderBooks = () => {
     let books = {
       title: booksDetails.title,
@@ -44,6 +37,7 @@ const OrderSummary = ({route}) => {
       customerDetails: customerDetails,
     });
   };
+
   const handleEdit = (value) => {
     if (value === 'editDetails') {
       navigation.navigate('signUp', {
@@ -54,6 +48,7 @@ const OrderSummary = ({route}) => {
       navigation.navigate('signUp', {alternateAddress: 'altenateAddress'});
     }
   };
+
   const render = (item, index) => {
     console.log('enter flatlist', item);
     return (
@@ -63,6 +58,7 @@ const OrderSummary = ({route}) => {
       </View>
     );
   };
+
   return (
     <View>
       <View style={{height: '100%', backgroundColor: 'white', paddingTop: 35}}>
@@ -93,7 +89,8 @@ const OrderSummary = ({route}) => {
                   <Button
                     title="confirm Order"
                     color="brown"
-                    onPress={() => handleOrderBooks()}></Button>
+                    onPress={() => handleOrderBooks()}
+                  />
                 </View>
               </View>
             </View>
@@ -123,7 +120,6 @@ const OrderSummary = ({route}) => {
           </View>
         </Card>
       </View>
-      {/* ) : null} */}
     </View>
   );
 };

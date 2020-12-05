@@ -5,11 +5,10 @@ import React, {useState} from 'react';
 import ViewBooks from '../showBooks/ViewBooks';
 import StatusBarView from '../statusBar/StatusBarView';
 
-const HomePage = ({route}) => {
+const HomePage = () => {
   const [sortingOrder, setSortingOrder] = useState([]);
   const [booleanSort, setBooleanSort] = useState(false);
   const flag = Math.random();
-  console.log('sorted data', sortingOrder);
 
   return (
     <View>

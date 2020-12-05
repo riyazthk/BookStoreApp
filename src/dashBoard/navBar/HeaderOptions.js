@@ -18,19 +18,16 @@ const HeaderOptions = (props) => {
   const [checkLogin, setCheckLogin] = useState(true);
   const [checkEmailToken, setCheckEmailToken] = useState(null);
   const refRBSheet = useRef();
-  console.log('ll', checkLogin);
+  let bookArray = [];
+
   useEffect(() => {
-    console.log('enter');
     const callDetails = async () => {
-      console.log('entry');
       setCheckEmailToken(await AsyncStorage.getItem('token'));
       if (checkEmailToken !== null) {
         getCustomerDetails().then((res) => {
           Object.keys(res).map((keys, index) => {
-            console.log('consol', res[keys].formValue);
             setUserDetails(res[keys].formValue);
           });
-          // console.log('user', userDetails);
         });
         setCheckLogin(false);
       }
@@ -39,35 +36,32 @@ const HeaderOptions = (props) => {
   }, [checkEmailToken, userDetails]);
 
   const handlePrice = async (value) => {
-    console.log('valu', value);
     if (value === 'ascending') {
       let arr = [];
-      console.log(arr);
       props.setSortingOrder(null);
       arr = ascendingOrder(value);
       props.setSortingOrder(arr);
       props.setBooleanSort(true);
     } else {
       let arr = [];
-      console.log(arr);
       props.setSortingOrder(null);
       arr = descendingOrder(value);
-      console.log('value', arr);
       props.setSortingOrder(arr);
       props.setBooleanSort(true);
     }
   };
+
   const handleSearch = () => {
     setCheckSearch(!checkSearch);
-
     props.setBooleanSort(false);
   };
-  let bookArray = [];
+
   const handleSearchBook = (searchBook) => {
     bookArray = searchData(searchBook);
     props.setSortingOrder(bookArray);
     props.setBooleanSort(true);
   };
+
   const handleRawBottomSheet = (value) => {
     if (value === 'account') {
       setBooleanRbSheet(true);
@@ -76,14 +70,15 @@ const HeaderOptions = (props) => {
       setBooleanRbSheet(false);
       refRBSheet.current.open();
     }
-    console.log('rbsheet', booleanRbSheet);
   };
+
   const handleSignOut = async () => {
     await AsyncStorage.removeItem('token');
     await AsyncStorage.removeItem('userAccountDetails');
     await AsyncStorage.removeItem('email');
     navigation.navigate('login');
   };
+
   return (
     <View style={{paddingTop: 28, paddingLeft: 10, paddingRight: 5}}>
       <View

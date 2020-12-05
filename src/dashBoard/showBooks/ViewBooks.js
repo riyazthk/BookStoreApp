@@ -7,22 +7,17 @@ import {
   Image,
   Button,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {bookDetails} from './bookDetails';
 import {Card} from 'react-native-elements';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import {getHistoryOrder} from '../../customerService/userDetails';
+import {useNavigation} from '@react-navigation/native';
 
 const ViewBooks = (props) => {
   const refRBSheet = useRef();
   const navigaiton = useNavigation();
   const filterBooksData =
     props.booleanSort === false ? bookDetails : props.sortingOrder;
-  console.log('sorting data', props.sortingOrder, props.booleanSort);
-  // useEffect(() => {
-  //   getHistoryOrder().then((res) => {});
-  // }, [props.flag]);
 
   const renderItem = (booksitem) => {
     return (
@@ -57,13 +52,11 @@ const ViewBooks = (props) => {
                 <Button
                   title="ADD To Bag"
                   color="brown"
-                  onPress={
-                    () =>
-                      navigaiton.navigate('orderPage', {
-                        booksitem: booksitem.item,
-                        bookIndex: booksitem.index,
-                      })
-                    //handleArrayBooks(booksitem)
+                  onPress={() =>
+                    navigaiton.navigate('orderPage', {
+                      booksitem: booksitem.item,
+                      bookIndex: booksitem.index,
+                    })
                   }
                 />
               </View>
@@ -80,8 +73,6 @@ const ViewBooks = (props) => {
             customStyles={{
               wrapper: {
                 backgroundColor: 'transparent',
-                //marginBottom: '13%',
-                //borderRadius: 10,
               },
               container: {
                 backgroundColor: '#e35656',
@@ -98,6 +89,7 @@ const ViewBooks = (props) => {
       </View>
     );
   };
+
   return (
     <View style={{}}>
       <FlatList

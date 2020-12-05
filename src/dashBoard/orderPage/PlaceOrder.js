@@ -1,17 +1,13 @@
+/* eslint-disable react-native/no-inline-styles */
 import AsyncStorage from '@react-native-community/async-storage';
 import {useNavigation} from '@react-navigation/native';
-/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {View, Text, Image, TouchableOpacity, Button} from 'react-native';
 import {Card} from 'react-native-elements';
 import {getCustomerDetails} from '../../customerService/userService';
+
 const PlaceOrder = (props) => {
   const navigation = useNavigation();
-  console.log(
-    'place order ',
-    props.bookDetails.price,
-    props.bookDetails.changePrice,
-  );
   const [quantity, setQuantity] = useState(1);
   const [price, setPrice] = useState(props.bookDetails.price);
   const [customerDetails, setCustomerDetails] = useState([]);
@@ -20,13 +16,9 @@ const PlaceOrder = (props) => {
   useEffect(() => {
     const call = async () => {
       let emailToken = await AsyncStorage.getItem('token');
-      console.log('tokenxcds', emailToken);
       if (emailToken !== null) {
-        console.log('entry');
         await getCustomerDetails().then((res) => {
-          console.log(res);
           Object.keys(res).map((keys, index) => {
-            console.log('console', res[keys]);
             setCustomerDetails(res[keys]);
           });
         });
@@ -34,6 +26,7 @@ const PlaceOrder = (props) => {
     };
     call();
   }, []);
+
   const handleRemoveCart = () => {
     if (quantity >= 1) {
       setQuantity(quantity - 1);
@@ -42,17 +35,17 @@ const PlaceOrder = (props) => {
       props.bookDetails.setChangePrice(price - props.bookDetails.price);
     }
   };
+
   const handleAddCart = () => {
     setQuantity(quantity + 1);
     props.bookDetails.setQuantity(props.bookDetails.quantity + 1);
     setPrice(price + props.bookDetails.price);
     props.bookDetails.setChangePrice(price + props.bookDetails.price);
   };
+
   const handlePlaceOrder = async () => {
     let token = await AsyncStorage.getItem('token');
-    console.log('toooooo', token);
     if (token !== null) {
-      console.log('seet', customerDetails, price);
       navigation.navigate('orderSummary', {
         customerDetails: customerDetails,
         booksDetails: props.bookDetails.booksitem,
@@ -61,9 +54,6 @@ const PlaceOrder = (props) => {
     } else {
       navigation.navigate('login', {flag: flag});
     }
-    // console.log('entry');
-    // AsyncStorage.removeItem('token');
-    // AsyncStorage.removeItem('email');
   };
 
   return (

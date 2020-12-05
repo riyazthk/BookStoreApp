@@ -11,7 +11,6 @@ const OrderHistory = () => {
 
   useEffect(() => {
     getHistoryOrder().then((res) => {
-      console.log('call', res);
       setViewHistory(res);
     });
   }, []);

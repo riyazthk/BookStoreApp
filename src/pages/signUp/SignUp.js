@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {View, Text, Button} from 'react-native';
 import {Card, Input} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -17,12 +17,10 @@ import {
   validatePassword,
 } from '../../dashBoard/formValidation/validations';
 import {data} from './arrayData';
+
 const SignUp = ({route}) => {
-  const {
-    customerDetails = undefined,
-    flag = undefined,
-    alternateAddress = undefined,
-  } = route.params ?? {};
+  const {customerDetails = undefined, alternateAddress = undefined} =
+    route.params ?? {};
   const [errorValue, setErrorValue] = useState([]);
   const [formValue, setFormValue] = useState([{}]);
   const [emptyValue, setEmptyValue] = useState([]);
@@ -37,29 +35,19 @@ const SignUp = ({route}) => {
   const [handleValue, setHandleValue] = useState([]);
   const [handleBookArrayFlag, setHandleBookArrayFlag] = useState([]);
   let response;
-
   let boolArr = [...handleBookArrayFlag];
   let boolEdit = [...editedValues];
-  // useEffect(() => {
-  //   if (customerDetails !== undefined) {
-  //     bookData.map((item, index) => {
-  //       boolArr[index] = false;
-  //       setHandleBookArrayFlag(boolArr);
-  //       boolEdit[index] = item;
-  //       setEditedValues(boolEdit);
-  //     });
-  //   }
-  // }, []);
-  let count = 0;
+  let countEnterEditDetails = 0;
+
   const handleFormInput = (value, index, item) => {
-    if (customerDetails !== undefined && count === 0) {
-      bookData.map((item, index) => {
-        boolArr[index] = false;
+    if (customerDetails !== undefined && countEnterEditDetails === 0) {
+      bookData.map((customerValue, customerValueIndex) => {
+        boolArr[customerValueIndex] = false;
         setHandleBookArrayFlag(boolArr);
-        boolEdit[index] = item;
+        boolEdit[customerValueIndex] = customerValue;
         setEditedValues(boolEdit);
       });
-      count = 1;
+      countEnterEditDetails = 1;
     }
     let resArr;
     resArr = [...handleValue];
@@ -71,35 +59,30 @@ const SignUp = ({route}) => {
       item.key === 'city' ||
       item.key === 'landMark'
     ) {
-      console.log('entry');
       response = validateFormData(value);
       resArr[index] = response;
       setHandleValue(resArr);
       boolArr[index] = true;
       setHandleBookArrayFlag(boolArr);
     } else if (item.fieldName === 'numeric' || item.key === 'phoneNumber') {
-      console.log('entry');
       response = validateMobileNumber(value);
       resArr[index] = response;
       setHandleValue(resArr);
       boolArr[index] = true;
       setHandleBookArrayFlag(boolArr);
     } else if (item.fieldName === 'pincode' || item.key === 'pincode ') {
-      console.log('entry');
       response = validatePinCode(value);
       resArr[index] = response;
       setHandleValue(resArr);
       boolArr[index] = true;
       setHandleBookArrayFlag(boolArr);
     } else if (item.fieldName === 'email' || item.key === 'email ') {
-      console.log('entry');
       response = validateEmail(value);
       resArr[index] = response;
       setHandleValue(resArr);
       boolArr[index] = true;
       setHandleBookArrayFlag(boolArr);
     } else if (item.fieldName === 'password' || item.key === 'password ') {
-      console.log('entry');
       response = validatePassword(value);
       resArr[index] = response;
       setHandleValue(resArr);
@@ -126,7 +109,6 @@ const SignUp = ({route}) => {
         let formArr = [...formValue];
         formArr[index] = values;
         setFormValue(formArr);
-        console.log('value', formValue);
       } else {
         editedValues.map((editedItem) => {
           if (editedItem.key === values.key) {
@@ -134,55 +116,44 @@ const SignUp = ({route}) => {
           }
         });
       }
-      console.log('edit valuessss', editedValues);
     }
   };
+
   const handleCustomerDetails = async () => {
     let count = 0;
     let arra = [...errorValue];
     data.projectFields.map((item, index) => {
-      console.log('index', formValue[index], index);
       if (formValue[index] === undefined && customerDetails === undefined) {
-        console.log('enter');
         arra[index] = 'field not be a empty';
         setErrorValue(arra);
-        console.log(arra);
-        console.log('err', errorValue);
         count = 1;
       } else {
         count = 2;
       }
-      console.log('count', count);
     });
-    console.log('count entry', formValue);
 
     if (count === 2) {
-      console.log('count entry', formValue);
       if (customerDetails === undefined && alternateAddress === undefined) {
         let formData = {formValue: formValue};
         await SignUpData(formData).then((res) => {
           navigaiton.navigate('login');
-          console.log('signUp', res);
         });
       } else if (
         customerDetails !== undefined &&
         alternateAddress === undefined
       ) {
         let formData = {formValue: editedValues};
-        await editCustomerDetails(formData).then((res) => {
-          console.log(res);
-        });
+        await editCustomerDetails(formData).then((res) => {});
         navigaiton.navigate('homePage');
       } else if (alternateAddress !== undefined) {
         let formData = {formValue: formValue};
-        console.log('alternate', data);
         await alternateData(formData).then((res) => {
-          console.log(res);
           navigaiton.navigate('homePage');
         });
       }
     }
   };
+
   return (
     <View style={{height: '100%', paddingTop: 25, backgroundColor: 'white'}}>
       <Card>

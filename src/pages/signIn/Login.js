@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {View, Text, Button, ScrollView} from 'react-native';
 import {Card, Input} from 'react-native-elements';
 import {SignIn} from '../../customerService/userService';
@@ -13,19 +13,9 @@ const Login = () => {
   const [errorValue, setErrorValue] = useState([]);
   const [formValue, setFormValue] = useState([{}]);
   const [emptyValue, setEmptyValue] = useState([]);
-  // const [userDetails, setUserDetails] = useState([]);
   let arr;
   let empty;
   const flag = Math.random();
-  useEffect(() => {
-    // getCustomerDetails().then((res) => {
-    //   Object.keys(res).map((keys, index) => {
-    //     console.log('console', res[keys].formValue);
-    //     setUserDetails(res[keys].formValue);
-    //   });
-    //   console.log('details', userDetails[0].value);
-    // });
-  }, []);
   const navigaiton = useNavigation();
   const data = {
     projectId: 2,
@@ -44,19 +34,17 @@ const Login = () => {
       },
     ],
   };
+
   const handleFormInput = (value, index, item) => {
-    console.log('arrray benificia', value, index);
     let response;
     if (item.fieldName === 'email') {
       response = validateEmail(value);
     } else if (item.fieldName === 'password') {
       response = validatePassword(value);
     }
-    console.log('xc', response);
     if (response === false) {
       arr = [...errorValue];
       arr[index] = item.fieldErrorMsg;
-      console.log('value', arr);
       setErrorValue(arr);
     } else {
       arr = [...errorValue];
@@ -69,40 +57,31 @@ const Login = () => {
         key: item.fieldValue,
         value: response,
       };
-
       let formArr = [...formValue];
       formArr[index] = values;
       setFormValue(formArr);
-      console.log(formValue);
     }
   };
+
   const handleCustomerDetails = async () => {
     let count = 0;
     let arra = [...errorValue];
     data.projectFields.map((item, index) => {
-      console.log('index', formValue[index], index);
       if (formValue[index] === undefined) {
-        console.log('enter');
         arra[index] = 'field not be a empty';
         setErrorValue(arra);
-        console.log(arra);
-        console.log('err', errorValue);
         count = 1;
       } else {
         count = 2;
       }
-      console.log('count', count);
     });
     if (count === 2) {
       await SignIn(formValue).then((res) => {
-        // if (res.user.uid !== null) {
         navigaiton.navigate('homePage', {flag: flag});
-        //}
-
-        console.log('signIn', res);
       });
     }
   };
+
   return (
     <View style={{height: '100%', paddingTop: 25, backgroundColor: 'white'}}>
       <Card>
@@ -145,4 +124,5 @@ const Login = () => {
     </View>
   );
 };
+
 export default Login;
